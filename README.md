@@ -42,7 +42,6 @@ The application provides a clean interface to view, sync, and clear products fro
 
 * **`npm run dev`** – Start development server with hot reload
 * **`npm run build`** – Build for production
-* **`npm run preview`** – Preview production build locally
 
 ## Project Structure
 
@@ -84,6 +83,12 @@ The project follows Vue 3 composition API patterns and TypeScript best practices
 * `api.ts` handles all backend communication with proper typing
 * Components use reactive state management with Vue's composition API
 * TypeScript interfaces ensure type safety across the application
+
+### GitHub Actions
+
+This project is set up to deploy/audit automatically using GitHub Actions:
+* [deploy.yml](.github/workflows/deploy.yml)
+* [audit.yml](.github/workflows/audit.yml)
 
 ## Credits
 
