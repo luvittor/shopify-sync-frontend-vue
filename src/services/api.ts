@@ -19,9 +19,29 @@ export type ClearResult = {
   cleared: number;
 };
 
+export type PaginationInfo = {
+  current_page: number;
+  per_page: number;
+  total: number;
+  last_page: number;
+  from: number;
+  to: number;
+  has_more_pages: boolean;
+  prev_page_url: string | null;
+  next_page_url: string | null;
+};
+
+export type PaginationLinks = {
+  first: string;
+  last: string;
+  prev: string | null;
+  next: string | null;
+};
+
 export type ProductsResponse = {
-  products: Product[];
-  count: number;
+  data: Product[];
+  pagination: PaginationInfo;
+  links: PaginationLinks;
 };
 
 // Get base URL from environment variable
@@ -70,10 +90,10 @@ export async function http<T>(input: RequestInfo, init?: RequestInit): Promise<T
 
 // API endpoint functions
 export const api = {
-  // GET /v1/products
-  async getProducts(): Promise<Product[]> {
-    const response = await http<ProductsResponse>(buildUrl('/v1/products'));
-    return response.products;
+  // GET /v1/products with pagination
+  async getProducts(page: number = 1, perPage: number = 10): Promise<ProductsResponse> {
+    const url = buildUrl(`/v1/products?page=${page}&per_page=${perPage}`);
+    return http<ProductsResponse>(url);
   },
 
   // POST /v1/products/sync

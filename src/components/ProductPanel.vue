@@ -59,6 +59,19 @@
         <el-empty description="No products yet" />
       </template>
     </el-table>
+
+    <!-- Pagination -->
+    <div class="pagination-container" v-if="pagination.total > 0">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[5, 10, 20, 50]"
+        :total="pagination.total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -71,12 +84,26 @@ import {
   ElEmpty,
   ElMessage,
   ElMessageBox,
-  ElLoading
+  ElLoading,
+  ElPagination
 } from 'element-plus'
-import { api, type Product } from '../services/api'
+import { api, type Product, type PaginationInfo } from '../services/api'
 
 // Reactive state
 const products = ref<Product[]>([])
+const pagination = ref<PaginationInfo>({
+  current_page: 1,
+  per_page: 10,
+  total: 0,
+  last_page: 1,
+  from: 0,
+  to: 0,
+  has_more_pages: false,
+  prev_page_url: null,
+  next_page_url: null
+})
+const currentPage = ref(1)
+const pageSize = ref(10)
 const isRefreshing = ref(false)
 const isSyncing = ref(false)
 const isClearing = ref(false)
@@ -100,6 +127,18 @@ const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleString()
 }
 
+// Pagination handlers
+const handleSizeChange = (val: number): void => {
+  pageSize.value = val
+  currentPage.value = 1
+  handleRefresh()
+}
+
+const handleCurrentChange = (val: number): void => {
+  currentPage.value = val
+  handleRefresh()
+}
+
 // Action handlers
 const handleRefresh = async (): Promise<void> => {
   isRefreshing.value = true
@@ -110,8 +149,10 @@ const handleRefresh = async (): Promise<void> => {
   })
 
   try {
-    products.value = await api.getProducts()
-    ElMessage.success(`Loaded ${products.value.length} products`)
+    const response = await api.getProducts(currentPage.value, pageSize.value)
+    products.value = response.data
+    pagination.value = response.pagination
+    ElMessage.success(`Loaded ${response.data.length} products (Page ${response.pagination.current_page} of ${response.pagination.last_page})`)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to load products'
     await ElMessageBox.alert(message, 'Error', {
@@ -136,7 +177,8 @@ const handleSync = async (): Promise<void> => {
     const result = await api.syncProducts()
     ElMessage.success(`Synced ${result.synced} products`)
     
-    // Refresh the list after sync
+    // Reset to page 1 and refresh the list after sync
+    currentPage.value = 1
     await refreshProductsInternal()
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to sync products'
@@ -162,7 +204,8 @@ const handleClear = async (): Promise<void> => {
     const result = await api.clearProducts()
     ElMessage.success(`Cleared ${result.cleared} products`)
     
-    // Refresh the list after clear
+    // Reset to page 1 and refresh the list after clear
+    currentPage.value = 1
     await refreshProductsInternal()
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to clear products'
@@ -179,7 +222,9 @@ const handleClear = async (): Promise<void> => {
 // Internal refresh function (doesn't show loading states)
 const refreshProductsInternal = async (): Promise<void> => {
   try {
-    products.value = await api.getProducts()
+    const response = await api.getProducts(currentPage.value, pageSize.value)
+    products.value = response.data
+    pagination.value = response.pagination
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to refresh products'
     await ElMessageBox.alert(message, 'Error', {
@@ -208,6 +253,12 @@ onMounted(() => {
   flex-wrap: wrap;
 }
 
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
   .product-panel {
     padding: 15px;
@@ -219,6 +270,10 @@ onMounted(() => {
   
   .toolbar .el-button {
     width: 100%;
+  }
+
+  .pagination-container {
+    margin-top: 15px;
   }
 }
 </style>
