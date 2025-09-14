@@ -7,7 +7,7 @@
 
 A Vue.js frontend application to view and synchronize Shopify products.
 
-This project was developed as part of a **technical assessment**: synchronize Shopify products using **Vue.js** for the frontend and **Laravel** for the backend (visit the repo here: [shopify-sync-laravel-backend](https://github.com/luvittor/shopify-sync-laravel-backend)).
+This project was developed as part of a **technical assessment**: synchronize Shopify products using **Vue.js** for the frontend and **Laravel** for the backend (visit the repo here: [shopify-sync-backend-laravel](https://github.com/luvittor/shopify-sync-backend-laravel)).
 
 The application provides a clean interface to view, sync, and clear products from the Laravel backend API.
 
