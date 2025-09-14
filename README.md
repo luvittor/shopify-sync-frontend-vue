@@ -13,8 +13,8 @@ The application provides a clean interface to view, sync, and clear products fro
 
 ## Requirements
 
-* Node.js 18 or higher
-* npm
+* Node.js 20 or higher
+* npm 10 or higher
 * Vue.js 3.5
 * TypeScript 5.9
 * Vite 7.1
