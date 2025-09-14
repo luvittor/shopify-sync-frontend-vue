@@ -5,7 +5,7 @@
 [![Vite](https://img.shields.io/badge/Vite-7.1-purple)](https://vitejs.dev/)
 [![Element Plus](https://img.shields.io/badge/Element%20Plus-2.11-blue)](https://element-plus.org/)
 
-A Vue.js frontend application for managing and synchronizing Shopify products.
+A Vue.js frontend application to view and synchronize Shopify products.
 
 This project was developed as part of a **technical assessment**: synchronize Shopify products using **Vue.js** for the frontend and **Laravel** for the backend (visit the repo here: [shopify-sync-laravel-backend](https://github.com/luvittor/shopify-sync-laravel-backend)).
 
