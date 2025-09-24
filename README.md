@@ -4,6 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.1-purple)](https://vitejs.dev/)
 [![Element Plus](https://img.shields.io/badge/Element%20Plus-2.11-blue)](https://element-plus.org/)
+[![deepwiki](https://img.shields.io/badge/deepwiki-article-blue)](https://deepwiki.com/luvittor/shopify-sync-frontend-vue)
 
 A Vue.js frontend application to view and synchronize Shopify products.
 
